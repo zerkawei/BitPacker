@@ -1,0 +1,6 @@
+FileVersion = 1
+
+[Project]
+Name = "BitPacker"
+TargetType = "BeefLib"
+StartupObject = "BitPacker.Program"
