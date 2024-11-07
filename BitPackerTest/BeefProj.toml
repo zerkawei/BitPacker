@@ -1,0 +1,6 @@
+FileVersion = 1
+Dependencies = {corlib = "*", BitPacker = "*"}
+
+[Project]
+Name = "BitPackerTest"
+StartupObject = "BitPackerTest.Program"

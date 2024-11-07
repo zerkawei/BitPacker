@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {BitPacker = {Path = "."}}
+Projects = {BitPacker = {Path = "."}, BitPackerTest = {Path = "BitPackerTest"}}
 
 [Workspace]
-StartupProject = "BitPacker"
+StartupProject = "BitPackerTest"
