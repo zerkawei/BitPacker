@@ -3,7 +3,7 @@ namespace BitPacker;
 
 public class PackingScheme
 {
-	private BitPosition[] fields ~ delete _;
+	protected BitPosition[] fields ~ delete _;
 	private int size;
 
 	public this(BitPosition[] fields)
@@ -11,6 +11,8 @@ public class PackingScheme
 		this.fields = fields;
 		ComputeSize();
 	}
+
+	protected this() {}
 
 	public this(params uint8[] sizes) : this(=> BitPacker.DefaultPacker, params sizes) {}
 	public this<T>(T packer, params uint8[] sizes) where T : delegate void(BitPosition[] sizes)
@@ -26,7 +28,7 @@ public class PackingScheme
 
 	public int Size => size;
 
-	private void ComputeSize()
+	protected void ComputeSize()
 	{
 		size = 0;
 		for(let f in fields)
