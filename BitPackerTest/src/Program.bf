@@ -6,18 +6,15 @@ public class Program
 {
 	public static void Main()
 	{
-		BitPosition[] sizes = new .(.(10),.(2),.(5),.(1),.(14));
-				
-		BitPackedType model = scope .(sizes, => BitPacker.DefaultPacker);
-		uint8[] instance = scope .[model.Size];
+		PackingScheme model = scope .(10, 2, 5, 1, 14);
+		BitPack instance = scope .(model);
 
-		model.Set(instance, 0, 1);
-		model.Set(instance, 1, 3);
+		instance[0] = .Create(1);
+		instance[1] = .Create(3);
 
-		Console.WriteLine(model.Get<uint16>(instance, 0));
-		Console.WriteLine(model.Get<uint8>(instance, 1));
+		Console.WriteLine(instance[0].Get<uint>());
+		Console.WriteLine(instance[1].Get<uint>());
 
-		Console.WriteLine(instance[0]);
 		Console.Read();
 	}
 }
