@@ -6,7 +6,7 @@ public class BitPack
 	private PackingScheme scheme;
 	private uint8* bytes;
 
-	public this(PackingScheme scheme, uint8* bytes)
+	public this(uint8* bytes, PackingScheme scheme)
 	{
 		this.scheme = scheme;
 		this.bytes = bytes;
@@ -19,6 +19,15 @@ public class BitPack
 		
 		this.scheme = scheme;
 		this.bytes = bytes;
+	}
+
+	[AllowAppend]
+	public this(PackingScheme scheme, params Object[] values) : this(scheme)
+	{
+		for(let i < values.Count)
+		{
+			this[i] = .CreateFromBoxed(values[i]);
+		}
 	}
 
 	public PackingScheme Scheme => scheme;
