@@ -60,7 +60,7 @@ public class TypedPackingScheme : PackingScheme
 		case .Enum(let enumType):
 			return .Create(enumType, &value);
 		case .Bool:
-			return .Create((uint8)value);
+			return .Create(typeof(bool), &value);
 		}
 	}
 
