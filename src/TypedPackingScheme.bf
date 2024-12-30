@@ -7,6 +7,7 @@ public enum FieldDefintion
 	case Bits(uint8 size);
 	case IntRange(int min, int max);
 	case Enum(Type enumType);
+	case Bool;
 
 	public uint8 BitSize
 	{
@@ -20,6 +21,8 @@ public enum FieldDefintion
 				return (.)BitPacker.log2_64((.)(max - min + 1)) + 1;
 			case Enum(let enumType):
 				return (.)BitPacker.log2_64((.)(enumType.FieldCount)) + 1;
+			case Bool:
+				return 1;
 			}	
 		}
 	}
@@ -56,6 +59,8 @@ public class TypedPackingScheme : PackingScheme
 			return .Create((int)value + min);
 		case .Enum(let enumType):
 			return .Create(enumType, &value);
+		case .Bool:
+			return .Create((uint8)value);
 		}
 	}
 
@@ -80,6 +85,8 @@ public class TypedPackingScheme : PackingScheme
 			case 8:
 				bits = (.)value.Get<uint64>();
 			}
+		case .Bool:
+			bits = value.Get<uint8>();
 		}
 		fields[field].SetIn(instance.Ptr, bits);
 	}

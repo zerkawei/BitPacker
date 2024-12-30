@@ -26,16 +26,18 @@ public class Program
 		
 		Console.WriteLine("== TYPED ==");
 
-		TypedPackingScheme typedModel = scope .(FieldDefintion.Bits(3), .Enum(typeof(Foo)), .IntRange(-1,1));
+		TypedPackingScheme typedModel = scope .(FieldDefintion.Bits(3), .Enum(typeof(Foo)), .IntRange(-1,1), .Bool);
 		BitPack tInstance = scope .(typedModel);
 
 		tInstance[0] = .Create(2);
 		tInstance[1] = .Create(Foo.C);
 		tInstance[2] = .Create(0);
+		tInstance[3] = .Create(true);
 
 		Console.WriteLine(tInstance[0].Get<uint>());
 		Console.WriteLine(tInstance[1].Get<Foo>());
 		Console.WriteLine(tInstance[2].Get<int>());
+		Console.WriteLine(tInstance[3].Get<bool>());
 
 		Console.Read();
 	}
