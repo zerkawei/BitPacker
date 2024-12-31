@@ -48,9 +48,9 @@ public class TypedPackingScheme : PackingScheme
 		ComputeSize();
 	}
 
-	public override Variant Get(Span<uint8> instance, int field)
+	public override Variant Get(uint8* instance, int field)
 	{
-		var value = fields[field].GetFrom(instance.Ptr);
+		var value = fields[field].GetFrom(instance);
 		switch(fieldDefs[field])
 		{
 		case .Bits(?):
@@ -64,7 +64,7 @@ public class TypedPackingScheme : PackingScheme
 		}
 	}
 
-	public override void Set(Span<uint8> instance, int field, Variant value)
+	public override void Set(uint8* instance, int field, Variant value)
 	{
 		uint bits = 0;
 		switch(fieldDefs[field])
@@ -88,7 +88,7 @@ public class TypedPackingScheme : PackingScheme
 		case .Bool:
 			bits = value.Get<uint8>();
 		}
-		fields[field].SetIn(instance.Ptr, bits);
+		fields[field].SetIn(instance, bits);
 	}
 
 }

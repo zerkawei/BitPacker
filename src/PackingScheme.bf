@@ -40,6 +40,6 @@ public class PackingScheme
 		}
 	}
 
-	public virtual Variant Get(Span<uint8> instance, int field) => .Create(fields[field].GetFrom(instance.Ptr));
-	public virtual void Set(Span<uint8> instance, int field, Variant value) => fields[field].SetIn(instance.Ptr, value.Get<uint>());
+	public virtual Variant Get(uint8* instance, int field) => .Create(fields[field].GetFrom(instance));
+	public virtual void Set(uint8* instance, int field, Variant value) => fields[field].SetIn(instance, value.Get<uint>());
 }

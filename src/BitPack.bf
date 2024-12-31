@@ -30,12 +30,12 @@ public class BitPack
 		}
 	}
 
+	public uint8* Ptr => bytes;
 	public PackingScheme Scheme => scheme;
-	public Span<uint8> Bytes => .(bytes, scheme.Size);
 
 	public Variant this[int field]
 	{
-		get => scheme.Get(Bytes, field);
-		set => scheme.Set(Bytes, field, value);
+		get => scheme.Get(bytes, field);
+		set => scheme.Set(bytes, field, value);
 	}
 }
