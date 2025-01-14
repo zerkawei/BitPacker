@@ -51,7 +51,7 @@ public class Program
 
 		Console.WriteLine("== UNION ==");
 
-		PackUnionArray unionArray = scope .(new .(model, typedModel), 2);
+		PackUnionArray unionArray = scope .(new .(model, typedModel), 2, true);
 		Console.WriteLine(unionArray.Size);
 
 		unionArray[0] = .(instance);

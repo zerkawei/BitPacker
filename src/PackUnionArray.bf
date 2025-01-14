@@ -5,21 +5,23 @@ namespace BitPacker;
 
 public class PackUnionArray
 {
-	private PackingScheme[] schemes ~ delete _;
+	private PackingScheme[] schemes ~ if(ownsSchemeSet) delete _;
+	private bool ownsSchemeSet;
 	private int count;
 	private int stride;
 	private uint8* ptr;
 
-	public this(PackingScheme[] schemes, int count, uint8* ptr)
+	public this(PackingScheme[] schemes, int count, uint8* ptr, bool ownsSchemeSet = false)
 	{
 		this.schemes = schemes;
 		this.count  = count;
 		this.ptr = ptr;
 		this.stride = ComputeStride(schemes);
+		this.ownsSchemeSet = ownsSchemeSet;
 	}
 
 	[AllowAppend]
-	public this(PackingScheme[] schemes, int count)
+	public this(PackingScheme[] schemes, int count, bool ownsSchemeSet = false)
 	{
 		let stride = ComputeStride(schemes);
 		let ptr = append uint8[stride*count]*;
@@ -28,11 +30,33 @@ public class PackUnionArray
 		this.count = count;
 		this.ptr = ptr;
 		this.stride = stride;
+		this.ownsSchemeSet = ownsSchemeSet;
 	}
+
+	[AllowAppend]
+	public this(PackingScheme[] schemes, List<BitPack> from, bool ownsSchemeSet = false)
+	{
+		let stride = ComputeStride(schemes);
+		let ptr = append uint8[stride*from.Count]*;
+
+		this.schemes = schemes;
+		this.count = from.Count;
+		this.stride = stride;
+		this.ownsSchemeSet = ownsSchemeSet;
+		this.ptr = ptr;
+
+		for(let i < from.Count)
+		{
+			this[i] = .(from[i]);
+		}
+	}	
 
 	[AllowAppend]
 	public this(List<BitPack> from)
 	{
+		let stride = ComputeStride(from);
+		let ptr = append uint8[stride*from.Count]*;
+
 		let schemeList = scope List<PackingScheme>();
 		for(let i < from.Count)
 		{
@@ -44,10 +68,8 @@ public class PackUnionArray
 
 		schemes = new .[schemeList.Count];
 		schemeList.CopyTo(schemes);
-		stride = ComputeStride(schemes);
 		count = from.Count;
-
-		let ptr = append uint8[stride*count]*;
+		this.ownsSchemeSet = true;
 		this.ptr = ptr;
 
 		for(let i < from.Count)
@@ -95,6 +117,16 @@ public class PackUnionArray
 		for(let s in schemes)
 		{
 			if(s.Size > stride) stride = s.Size;
+		}
+		return ++stride;
+	}
+
+	private static int ComputeStride(List<BitPack> pack)
+	{
+		int stride = 0;
+		for(let p in pack)
+		{
+			if(p.Scheme.Size > stride) stride = p.Scheme.Size;
 		}
 		return ++stride;
 	}
