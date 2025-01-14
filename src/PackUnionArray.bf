@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Collections;
 namespace BitPacker;
 
 public class PackUnionArray
@@ -15,7 +16,6 @@ public class PackUnionArray
 		this.count  = count;
 		this.ptr = ptr;
 		this.stride = ComputeStride(schemes);
-		
 	}
 
 	[AllowAppend]
@@ -29,6 +29,32 @@ public class PackUnionArray
 		this.ptr = ptr;
 		this.stride = stride;
 	}
+
+	[AllowAppend]
+	public this(List<BitPack> from)
+	{
+		let schemeList = scope List<PackingScheme>();
+		for(let i < from.Count)
+		{
+			if(!schemeList.Contains(from[i].Scheme))
+			{
+				schemeList.Add(from[i].Scheme);
+			}
+		}
+
+		schemes = new .[schemeList.Count];
+		schemeList.CopyTo(schemes);
+		stride = ComputeStride(schemes);
+		count = from.Count;
+
+		let ptr = append uint8[stride*count]*;
+		this.ptr = ptr;
+
+		for(let i < from.Count)
+		{
+			this[i] = .(from[i]);
+		}
+	}	
 
 	public PackingScheme[] Schemes => schemes;
 	public int Count => count;
@@ -53,6 +79,14 @@ public class PackUnionArray
 				target[j] = value.Ptr[j];
 			}	
 		}
+	}
+
+	public void AppendTo(List<BitPack> list)
+	{
+		for(let i < count)
+		{
+			list.Add(new .(this[i]));
+		}	
 	}
 
 	private static int ComputeStride(PackingScheme[] schemes)
